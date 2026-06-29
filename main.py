@@ -1,6 +1,10 @@
 from pathlib import Path
 
 
+def get_file_extension(file_path):
+    return file_path.suffix
+
+
 def list_files(folder_path):
     path = Path(folder_path)
 
@@ -16,7 +20,12 @@ def list_files(folder_path):
 
     for item in path.iterdir():
         if item.is_file():
-            print(item.name)
+            extension = get_file_extension(item)
+
+            if extension == "":
+                extension = "No Extension"
+
+            print(f"{item.name}  -->  {extension}")
 
 
 def main():
