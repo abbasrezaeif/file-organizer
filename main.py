@@ -32,7 +32,7 @@ def create_category_folders(base_path):
         folder_path.mkdir(exist_ok=True)
 
 
-def list_files(folder_path):
+def preview_file_moves(folder_path):
     path = Path(folder_path)
 
     if not path.exists():
@@ -45,22 +45,24 @@ def list_files(folder_path):
 
     create_category_folders(path)
 
-    print("\nFiles found:\n")
+    print("\nPreview:\n")
 
     count = 0
 
     for item in path.iterdir():
         if item.is_file():
             count += 1
+
             extension = get_file_extension(item)
-
-            if extension == "":
-                extension = "No Extension"
-
             category = get_category(extension)
-            print(f"{item.name}  -->  {extension}  -->  {category}")
 
-    print(f"\nTotal files: {count}")
+            destination = path / category / item.name
+
+            print(f"{item.name}")
+            print(f"  -> {destination}")
+            print()
+
+    print(f"Total files: {count}")
 
 
 def main():
@@ -69,7 +71,7 @@ def main():
 
     folder = input("Enter folder path: ")
 
-    list_files(folder)
+    preview_file_moves(folder)
 
 
 if __name__ == "__main__":
