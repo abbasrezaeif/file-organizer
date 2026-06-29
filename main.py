@@ -18,14 +18,20 @@ def list_files(folder_path):
 
     print("\nFiles found:\n")
 
+    count = 0
+
     for item in path.iterdir():
         if item.is_file():
+            count += 1
+
             extension = get_file_extension(item)
 
             if extension == "":
                 extension = "No Extension"
 
             print(f"{item.name}  -->  {extension}")
+
+    print(f"\nTotal files: {count}")
 
 
 def main():
