@@ -1,4 +1,5 @@
 from pathlib import Path
+import shutil
 
 
 FILE_CATEGORIES = {
@@ -32,7 +33,23 @@ def create_category_folders(base_path):
         folder_path.mkdir(exist_ok=True)
 
 
-def preview_file_moves(folder_path):
+def get_file_moves(folder_path):
+    path = Path(folder_path)
+
+    moves = []
+
+    for item in path.iterdir():
+        if item.is_file():
+            extension = get_file_extension(item)
+            category = get_category(extension)
+            destination = path / category / item.name
+
+            moves.append((item, destination))
+
+    return moves
+
+
+def organize_files(folder_path):
     path = Path(folder_path)
 
     if not path.exists():
@@ -45,24 +62,31 @@ def preview_file_moves(folder_path):
 
     create_category_folders(path)
 
+    moves = get_file_moves(path)
+
+    if not moves:
+        print("No files found.")
+        return
+
     print("\nPreview:\n")
 
-    count = 0
+    for source, destination in moves:
+        print(f"{source.name}")
+        print(f"  -> {destination}")
+        print()
 
-    for item in path.iterdir():
-        if item.is_file():
-            count += 1
+    print(f"Total files: {len(moves)}")
 
-            extension = get_file_extension(item)
-            category = get_category(extension)
+    confirm = input("\nMove these files? (y/n): ").strip().lower()
 
-            destination = path / category / item.name
+    if confirm != "y":
+        print("Operation cancelled.")
+        return
 
-            print(f"{item.name}")
-            print(f"  -> {destination}")
-            print()
+    for source, destination in moves:
+        shutil.move(str(source), str(destination))
 
-    print(f"Total files: {count}")
+    print("\nFiles organized successfully.")
 
 
 def main():
@@ -71,7 +95,7 @@ def main():
 
     folder = input("Enter folder path: ")
 
-    preview_file_moves(folder)
+    organize_files(folder)
 
 
 if __name__ == "__main__":
