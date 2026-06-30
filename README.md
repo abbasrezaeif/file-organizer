@@ -4,6 +4,10 @@ A Python application that automatically organizes files into folders based on th
 
 ---
 
+![Demo](assets/demo.png)
+
+
+
 ## ✨ Features
 
 - 📂 Organize files by category
